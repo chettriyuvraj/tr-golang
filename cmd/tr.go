@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 	"unicode/utf8"
@@ -23,17 +22,14 @@ func findPatternType(p string) (string, error) {
 		return "", err
 	}
 	if match {
-		fmt.Println("RANGE")
 		return RANGE, nil
 	}
 
-	fmt.Println(p)
 	match, err = regexp.MatchString("^\\[:.*:\\]$", p)
 	if err != nil {
 		return "", err
 	}
 	if match {
-		fmt.Println("CLASS")
 		return CLASS, nil
 	}
 
@@ -128,17 +124,19 @@ func classAsRunes(class string) []rune {
 
 func substitute(s string, m map[rune]rune) string {
 	var res strings.Builder
+	idx := 0
 
-	for i := 0; i < len(s); i++ {
-		b := rune(s[i])
-		replacement, inMap := m[b]
+	for r, size := utf8.DecodeRuneInString(s); idx < len(s); r, size = utf8.DecodeRuneInString(s[idx:]) {
+		replacement, inMap := m[r]
 
 		if !inMap {
-			res.WriteRune(b)
+			res.WriteRune(r)
+			idx += size
 			continue
 		}
 
 		res.WriteRune(replacement)
+		idx += size
 	}
 
 	return res.String()
