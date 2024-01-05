@@ -25,16 +25,17 @@ var rootCmd = &cobra.Command{
 		}
 
 		p1, p2 := args[0], args[1]
-		if isValid, err := isValidRangePattern(p1); !isValid || err != nil {
-			fmt.Fprint(cmd.OutOrStdout(), HELPSTRING)
-			return
-		}
-		if isValid, err := isValidRangePattern(p2); !isValid || err != nil {
-			fmt.Fprint(cmd.OutOrStdout(), HELPSTRING)
-			return
-		}
 
-		r1, r2 := createRangeFromPattern(p1), createRangeFromPattern(p2)
+		r1, err := createRangeFromPattern(p1)
+		if err != nil {
+			fmt.Fprint(cmd.OutOrStdout(), HELPSTRING)
+			return
+		}
+		r2, err := createRangeFromPattern(p2)
+		if err != nil {
+			fmt.Fprint(cmd.OutOrStdout(), HELPSTRING)
+			return
+		}
 
 		rangeSubstitutions := createRangeSubstitutions(r1, r2)
 
