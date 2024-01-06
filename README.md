@@ -11,3 +11,10 @@ Supports the following:
 - Simple range substitutions (a-z A-Z)
 - Reverse ranges (a-z z-a)
 - Some class specifiers ("[:alpha:]" "[:lower:]" "[:upper:]")
+
+
+## How to run
+
+In the root directory:
+- _go build_
+- _./tr a-z A-Z_
